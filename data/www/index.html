@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ESP32</title>
+    <link rel="stylesheet" href="/css/base.css">
+</head>
+<body>
+    <div class="box-container">
+        <div class="box">
+            <h2>System</h2>
+            <p>
+                WiFi: %WIFI_SSID%
+            </p>
+            <p>
+                SPIFFS: %SPIFFS_USED% / %SPIFFS_TOTAL%
+            </p>
+        </div>
+        <div class="box">
+            <h2>LED</h2>
+            <label>
+                Mode <br/>
+                <select id="modeSelect" onchange="modeChanged()" style="margin-left: 2em;">
+                    <option>OFF_CUSTOM</option>
+                    <option>RAINBOW</option>
+                </select>
+            </label>
+            <br>
+            <label>
+                Brightness<br/>
+                <div style="text-align: center;">
+                    <input type="range" min="0" max="255" class="slider"
+                           id="brightnessSlider" onchange="brightnessChanged()">
+                </div>
+            </label>
+        </div>
+    </div>
+</body>
+<script>
+    function modeChanged() {
+        let selectUi = document.getElementById("modeSelect")
+        let http = new XMLHttpRequest()
+        let apiUrl = "http://" + window.location.host
+        console.log(apiUrl + "/led/?mode=" + selectUi.value)
+        http.open("GET", apiUrl + "/led/?mode=" + selectUi.value)
+        http.send()
+    }
+
+    function brightnessChanged(src) {
+        let brightnessUi = document.getElementById("brightnessSlider")
+        let http = new XMLHttpRequest()
+        let apiUrl = "http://" + window.location.host
+        console.log(apiUrl + "/led/?brightness=" + brightnessUi.value)
+        http.open("GET", apiUrl + "/led/?brightness=" + brightnessUi.value)
+        http.send()
+    }
+</script>
+</html>
